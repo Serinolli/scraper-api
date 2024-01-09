@@ -5,14 +5,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-)
 
-type Post struct {
-	Id      string
-	Title   string
-	Upvotes int
-	Content string
-}
+	models "github.com/Serinolli/scraper-api/models"
+)
 
 func main() {
 	resp, err := http.Get("http://localhost:8000/posts")
@@ -28,7 +23,7 @@ func main() {
 
 	body, err := io.ReadAll(resp.Body)
 
-	var response []Post
+	var response []models.Post
 	json.Unmarshal(body, &response)
 
 	if err != nil {

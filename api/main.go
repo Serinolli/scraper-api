@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	model "github.com/Serinolli/scraper-api/models"
+	models "github.com/Serinolli/scraper-api/models"
 )
 
 var port string = "8000"
@@ -24,7 +24,7 @@ func getPosts(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode([]model.Post{{
+	json.NewEncoder(writer).Encode([]models.Post{{
 		ID:      "sampletest1",
 		Title:   "starting api",
 		Upvotes: 15,
