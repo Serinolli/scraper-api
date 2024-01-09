@@ -1,8 +1,8 @@
-package models
+package model
 
 type Post struct {
-	Id      string
-	Title   string
-	Upvotes int
-	Content string
+	ID      string `json:"id"`
+	Title   string `json:"title"`
+	Upvotes int    `json:"upvotes"`
+	Content string `json:"content"`
 }
