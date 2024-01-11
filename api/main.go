@@ -17,6 +17,10 @@ func main() {
 
 	fmt.Println("Listening to port " + port)
 	muxRouter.HandleFunc("/posts", getPosts).Methods("GET")
+	muxRouter.HandleFunc("/posts", createPost).Methods("POST")
+	//muxRouter.HandleFunc("/posts/{id}", getPost).Methods("GET")
+	//muxRouter.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
+	//muxRouter.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+port, muxRouter))
 }
@@ -29,4 +33,17 @@ func getPosts(writer http.ResponseWriter, request *http.Request) {
 		Upvotes: 15,
 		Content: "lorem ipsum dolor sit amet",
 	}})
+}
+
+func createPost(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "application/json")
+
+	var post models.Post
+	err := json.NewDecoder(request.Body).Decode(&post)
+	if err != nil {
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	json.NewEncoder(writer).Encode(post)
 }
