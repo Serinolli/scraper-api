@@ -38,12 +38,12 @@ func getPosts(writer http.ResponseWriter, request *http.Request) {
 func createPost(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 
-	var post models.Post
-	err := json.NewDecoder(request.Body).Decode(&post)
+	var posts []models.Post
+	err := json.NewDecoder(request.Body).Decode(&posts)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	json.NewEncoder(writer).Encode(post)
+	json.NewEncoder(writer).Encode(posts)
 }
