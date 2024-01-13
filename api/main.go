@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	models "github.com/Serinolli/scraper-api/models"
+	m "github.com/Serinolli/scraper-api/models"
 	"github.com/gorilla/mux"
 )
 
@@ -27,7 +27,7 @@ func main() {
 
 func getPosts(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode([]models.Post{{
+	json.NewEncoder(writer).Encode([]m.Post{{
 		ID:      "sampletest1",
 		Title:   "starting api",
 		Upvotes: 15,
@@ -38,7 +38,7 @@ func getPosts(writer http.ResponseWriter, request *http.Request) {
 func createPost(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 
-	var posts []models.Post
+	var posts []m.Post
 	err := json.NewDecoder(request.Body).Decode(&posts)
 	if err != nil {
 		http.Error(writer, err.Error(), http.StatusBadRequest)
