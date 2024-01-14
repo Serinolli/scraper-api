@@ -1,5 +1,5 @@
 package main
 
-func GetPosts() {
+func GetPosts[T any](value T) {
 
 }
