@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -8,12 +9,21 @@ import (
 
 	m "github.com/Serinolli/scraper-api/models"
 	"github.com/gorilla/mux"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var port string = "8000"
 
 func main() {
 	muxRouter := mux.NewRouter()
+
+	fmt.Println("Stablishing connection with the MongoDB database...")
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Listening to port " + port)
 	muxRouter.HandleFunc("/posts", getPosts).Methods("GET")
