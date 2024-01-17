@@ -30,3 +30,26 @@ func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(results)
 }
+
+func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
+	coll := s.Client.Database("redditscrapper").Collection("posts")
+
+	var post m.Post
+	var err error
+
+	if err := json.NewDecoder(r.Body).Decode(&post); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	_, err = coll.InsertOne(context.TODO(), post)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(post)
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(r)
+}
