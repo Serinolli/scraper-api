@@ -8,8 +8,9 @@ import (
 	"net/http"
 
 	m "github.com/Serinolli/scraper-api/models"
-	"github.com/gorilla/mux"
+	r "github.com/Serinolli/scraper-api/repositories"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -25,21 +26,15 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(client)
-
+	server := &r.Server{Client: client}
 	fmt.Println("Listening to port " + port)
-	muxRouter.HandleFunc("/posts", getPosts).Methods("GET")
-	muxRouter.HandleFunc("/posts", createPosts).Methods("POST")
+	muxRouter.HandleFunc("/posts", server.GetAllPosts).Methods("GET")
+	muxRouter.HandleFunc("/post", server.CreatePost).Methods("POST")
 	//muxRouter.HandleFunc("/posts/{id}", getPost).Methods("GET")
 	//muxRouter.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
 	//muxRouter.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+port, muxRouter))
-}
-
-func getPosts(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-
 }
 
 func createPosts(writer http.ResponseWriter, request *http.Request) {
@@ -53,17 +48,4 @@ func createPosts(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	json.NewEncoder(writer).Encode(posts)
-}
-
-func createPost(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "application/json")
-
-	var post m.Post
-	err := json.NewDecoder(request.Body).Decode(&post)
-	if err != nil {
-		http.Error(writer, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	json.NewEncoder(writer).Encode(post)
 }
