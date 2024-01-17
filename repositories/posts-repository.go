@@ -1,4 +1,4 @@
-package main
+package repositories
 
 import (
 	"context"
@@ -16,8 +16,7 @@ type Server m.Server
 func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	coll := s.Client.Database("redditscrapper").Collection("posts")
 
-	query := bson.M{}
-	cursor, err := coll.Find(context.TODO(), query)
+	cursor, err := coll.Find(context.TODO(), bson.M{})
 	if err != nil {
 		log.Fatal(err)
 	}
