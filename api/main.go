@@ -29,9 +29,9 @@ func main() {
 	muxRouter.HandleFunc("/posts", server.GetAllPosts).Methods("GET")
 	muxRouter.HandleFunc("/posts", server.CreatePosts).Methods("POST")
 	muxRouter.HandleFunc("/post", server.CreatePost).Methods("POST")
-	//muxRouter.HandleFunc("/posts/{id}", getPost).Methods("GET")
-	//muxRouter.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
-	//muxRouter.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
+	muxRouter.HandleFunc("/posts/{postId}", server.GetPost).Methods("GET")
+	//muxRouter.HandleFunc("/posts/{postId}", updatePost).Methods("PUT")
+	//muxRouter.HandleFunc("/posts/{postId}", deletePost).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+port, muxRouter))
 }

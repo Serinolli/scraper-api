@@ -7,8 +7,10 @@ import (
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 
 	m "github.com/Serinolli/scraper-api/models"
+	"github.com/gorilla/mux"
 )
 
 type Server m.Server
@@ -29,6 +31,27 @@ func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(results)
+}
+
+func (s *Server) GetPost(w http.ResponseWriter, r *http.Request) {
+	coll := s.Client.Database("redditscrapper").Collection("posts")
+	id := (mux.Vars(r))["postId"]
+
+	var result bson.M
+	err := coll.FindOne(context.TODO(), bson.M{"postid": id}).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
 }
 
 func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {

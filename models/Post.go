@@ -1,7 +1,7 @@
 package model
 
 type Post struct {
-	ID        string `json:"id"`
+	PostId    string `json:"postid"`
 	SubReddit string `json:"subReddit"`
 	Timestamp string `json:"timeStamp"`
 	Author    string `json:"author"`
