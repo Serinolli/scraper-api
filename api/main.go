@@ -27,7 +27,7 @@ func main() {
 	server := &r.Server{Client: client}
 	fmt.Println("Listening to port " + port)
 	muxRouter.HandleFunc("/posts", server.GetAllPosts).Methods("GET")
-	muxRouter.HandleFunc("/posts", server.CreatePost).Methods("POST")
+	muxRouter.HandleFunc("/posts", server.CreatePosts).Methods("POST")
 	muxRouter.HandleFunc("/post", server.CreatePost).Methods("POST")
 	//muxRouter.HandleFunc("/posts/{id}", getPost).Methods("GET")
 	//muxRouter.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
