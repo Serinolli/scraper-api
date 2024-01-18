@@ -53,3 +53,31 @@ func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(r)
 }
+
+func (s *Server) CreatePosts(w http.ResponseWriter, r *http.Request) {
+	coll := s.Client.Database("redditscrapper").Collection("posts")
+
+	var posts []m.Post
+	var err error
+
+	if err := json.NewDecoder(r.Body).Decode(&posts); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var iPosts []interface{}
+	for _, p := range posts {
+		iPosts = append(iPosts, p)
+	}
+
+	_, err = coll.InsertMany(context.TODO(), iPosts)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(posts)
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(r)
+}
