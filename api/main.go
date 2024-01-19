@@ -30,8 +30,8 @@ func main() {
 	muxRouter.HandleFunc("/posts", server.CreatePosts).Methods("POST")
 	muxRouter.HandleFunc("/post", server.CreatePost).Methods("POST")
 	muxRouter.HandleFunc("/posts/{postId}", server.GetPost).Methods("GET")
-	//muxRouter.HandleFunc("/posts/{postId}", updatePost).Methods("PUT")
-	//muxRouter.HandleFunc("/posts/{postId}", deletePost).Methods("DELETE")
+	muxRouter.HandleFunc("/posts/{postId}", server.UpdatePost).Methods("PUT")
+	muxRouter.HandleFunc("/posts/{postId}", server.DeletePost).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+port, muxRouter))
 }

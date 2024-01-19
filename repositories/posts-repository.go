@@ -54,6 +54,54 @@ func (s *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+func (s *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
+	coll := s.Client.Database("redditscrapper").Collection("posts")
+	id := (mux.Vars(r))["postId"]
+
+	var result bson.M
+	err := coll.FindOneAndDelete(context.TODO(), bson.M{"postid": id}).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(result)
+}
+
+func (s *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
+	coll := s.Client.Database("redditscrapper").Collection("posts")
+	id := (mux.Vars(r))["postId"]
+
+	var post m.Post
+	if err := json.NewDecoder(r.Body).Decode(&post); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var result bson.M
+	err := coll.FindOneAndUpdate(context.TODO(), bson.M{"postid": id}, bson.M{"$set": post}).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(post)
+}
+
 func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 	coll := s.Client.Database("redditscrapper").Collection("posts")
 
