@@ -129,22 +129,30 @@ func (s *Server) CreatePosts(w http.ResponseWriter, r *http.Request) {
 	coll := s.Client.Database("redditscrapper").Collection("posts")
 
 	var posts []m.Post
-	var err error
 
 	if err := json.NewDecoder(r.Body).Decode(&posts); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	var iPosts []interface{}
-	for _, p := range posts {
-		iPosts = append(iPosts, p)
-	}
+	for _, post := range posts {
+		var postExists m.Post
+		err := coll.FindOne(context.TODO(), bson.M{"postid": post.PostId}).Decode(&postExists)
 
-	_, err = coll.InsertMany(context.TODO(), iPosts)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		if err == mongo.ErrNoDocuments {
+			_, err = coll.InsertOne(context.TODO(), post)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		} else {
+			var result m.Post
+			updtErr := coll.FindOneAndUpdate(context.TODO(), bson.M{"postid": post.PostId}, bson.M{"$set": post}).Decode(&result)
+			if updtErr != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
 	}
 
 	w.WriteHeader(http.StatusOK)
