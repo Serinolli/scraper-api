@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	r "github.com/Serinolli/scraper-api/repositories"
 
@@ -21,6 +22,14 @@ func main() {
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
 		panic(err)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal("Could not connect to MongoDB. Check again if the Docker instance is running.")
 	}
 
 	server := &r.Server{Client: client}
