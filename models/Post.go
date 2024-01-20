@@ -3,7 +3,7 @@ package model
 type Post struct {
 	PostId    string `json:"postid"`
 	SubReddit string `json:"subReddit"`
-	Timestamp string `json:"timeStamp"`
+	Timestamp int    `json:"timeStamp"`
 	Author    string `json:"author"`
 	URL       string `json:"url"`
 	Title     string `json:"title"`
