@@ -18,7 +18,6 @@ var port string = "8000"
 func main() {
 	muxRouter := mux.NewRouter()
 
-	fmt.Println("Stablishing connection with the MongoDB database...")
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
 		panic(err)
