@@ -6,7 +6,7 @@ Simple REST API designed for managing data obtained through the associated scrap
 
 ### Installing MongoDB with Docker
 ```
-docker run --name reddit-scrapper -p 27017:27017 -d mongo
+docker run --name reddit-scraper -p 27017:27017 -d mongo
 ```
 
 ## Testing
