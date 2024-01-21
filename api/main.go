@@ -29,7 +29,7 @@ func main() {
 
 	err = client.Ping(ctx, nil)
 	if err != nil {
-		log.Fatal("Could not connect to MongoDB. Check again if the Docker instance is running.")
+		log.Fatal("Could not connect to database. Check again if the Docker instance is running.")
 	}
 
 	server := &r.Server{Client: client}
