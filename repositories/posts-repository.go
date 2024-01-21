@@ -16,7 +16,7 @@ import (
 type Server m.Server
 
 func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 
 	cursor, err := coll.Find(context.TODO(), bson.M{})
 	if err != nil {
@@ -34,7 +34,7 @@ func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) GetPost(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 	id := (mux.Vars(r))["postId"]
 
 	var result bson.M
@@ -55,7 +55,7 @@ func (s *Server) GetPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 	id := (mux.Vars(r))["postId"]
 
 	var result bson.M
@@ -76,7 +76,7 @@ func (s *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 	id := (mux.Vars(r))["postId"]
 
 	var post m.Post
@@ -103,7 +103,7 @@ func (s *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 
 	var post m.Post
 	var err error
@@ -126,7 +126,7 @@ func (s *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) CreatePosts(w http.ResponseWriter, r *http.Request) {
-	coll := s.Client.Database("redditscrapper").Collection("posts")
+	coll := s.Client.Database("redditscraper").Collection("posts")
 
 	var posts []m.Post
 
