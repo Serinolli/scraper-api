@@ -9,3 +9,7 @@ Simple REST API designed for managing data obtained through the associated scrap
 docker run --name reddit-scrapper -p 27017:27017 -d mongo
 ```
 
+## Testing
+```
+go run api/main.go
+```
