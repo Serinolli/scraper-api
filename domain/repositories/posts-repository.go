@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	m "github.com/Serinolli/scraper-api/models"
+	m "github.com/Serinolli/scraper-api/domain/models"
 	"github.com/gorilla/mux"
 )
 

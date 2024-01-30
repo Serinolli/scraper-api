@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	r "github.com/Serinolli/scraper-api/repositories"
+	r "github.com/Serinolli/scraper-api/domain/repositories"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/mongo"
