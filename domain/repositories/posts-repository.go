@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	m "github.com/Serinolli/scraper-api/domain/models"
 	"github.com/gorilla/mux"
@@ -17,8 +18,10 @@ type Server m.Server
 
 func (s *Server) GetAllPosts(w http.ResponseWriter, r *http.Request) {
 	coll := s.Client.Database("redditscraper").Collection("posts")
+	sortingOptions := options.Find()
+	sortingOptions.SetSort(bson.D{{"createdat", -1}})
 
-	cursor, err := coll.Find(context.TODO(), bson.M{})
+	cursor, err := coll.Find(context.TODO(), bson.M{}, sortingOptions)
 	if err != nil {
 		log.Fatal(err)
 	}
